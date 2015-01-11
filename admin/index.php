@@ -56,8 +56,7 @@ if (defined('ENVIRONMENT'))
  * as this file.
  *
  */
-	// $system_path = 'system';
-	$system_path = 'core';
+	$system_path = '../system';
 
 /*
  *---------------------------------------------------------------
@@ -73,8 +72,7 @@ if (defined('ENVIRONMENT'))
  * NO TRAILING SLASH!
  *
  */
-	// $application_folder = 'application';
-	$application_folder = 'apps';
+	$application_folder = '../application';
 
 /*
  * --------------------------------------------------------------------
@@ -123,7 +121,15 @@ if (defined('ENVIRONMENT'))
  *
  */
 	// $assign_to_config['name_of_config_item'] = 'value of config item';
-
+	$assign_to_config['base_url'] = "http://".$_SERVER['HTTP_HOST'];
+ 	$assign_to_config['base_url'] .= preg_replace('@/+$@','',dirname($_SERVER['SCRIPT_NAME'])).'/';
+ 	// $assign_to_config['assets_url'] = "http://".$_SERVER['HTTP_HOST'];
+ 	// $assign_to_config['assets_url'] .= preg_replace('@/+$@','',dirname($_SERVER['SCRIPT_NAME'])).'/assets/';
+	
+	// $assign_to_config['base_url'] = 'http://localhost/ci-smpn20/admin';
+	$assign_to_config['assets_url'] = 'http://localhost/basket2/assets/';
+	$assign_to_config['index_page'] = '';
+	$assign_to_config['url_suffix'] = '';
 
 
 // --------------------------------------------------------------------
@@ -177,6 +183,18 @@ if (defined('ENVIRONMENT'))
 	// Name of the "system folder"
 	define('SYSDIR', trim(strrchr(trim(BASEPATH, '/'), '/'), '/'));
 
+	/*----SETTING UPLOAD FOLDER----*/
+	// The name of THIS file
+	define('DIR', pathinfo(__DIR__, PATHINFO_BASENAME));
+
+	// Path C:\xampp\htdocs\ci-smpn205\files\
+	// define('UPPATH', str_replace(DIR, '', __DIR__."files\\"));
+	define('UPPATH', str_replace(DIR, '', __DIR__));
+	
+	// DIR C:/xampp/htdocs/ci-smpn205/files/
+	// define('UPDIR', str_replace("\\", "/", UPPATH."files"));
+	define('UPDIR', str_replace("\\", "/", UPPATH));
+
 
 	// The path to the "application" folder
 	if (is_dir($application_folder))
@@ -192,7 +210,21 @@ if (defined('ENVIRONMENT'))
 
 		define('APPPATH', BASEPATH.$application_folder.'/');
 	}
+    /*
+    * HOMEPATH ADMIN - The full server path to the home root path
+     */
+    define('HOMEPATH', pathinfo(__FILE__, PATHINFO_DIRNAME).'/');
+    // define('ASSETPATH',BASEPATH.'assets/uploads'.'/');
 
+// Custom config for front-end modules changed by Bhuban <bhuban@gmail.com>
+        $assign_to_config['modules_locations'] = array(
+            APPPATH.'modules/backend/' => '../modules/backend/',
+    
+        );
+        // $assign_to_config['views_locations'] = array(
+        //     APPPATH.'modules/views/' => '../modules/views/',
+    
+        // );  
 /*
  * --------------------------------------------------------------------
  * LOAD THE BOOTSTRAP FILE
